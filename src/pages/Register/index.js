@@ -1,28 +1,18 @@
-import React, { useEffect, useState } from 'react'
-import { View, Text, ScrollView } from 'react-native'
+import React from 'react'
+import { ScrollView, Text, View } from 'react-native'
+import { useDispatch, useSelector } from 'react-redux'
+import { IllustrationRegister } from '../../assets'
 import { Button, Input } from '../../components'
+import { setForm } from '../../redux'
 import { colors } from '../../utils'
-import { IconBack, IllustrationRegister } from '../../assets'
-import { useSelector } from 'react-redux'
 
-const Register = () => {
-  const RegisterReducer = useSelector(state => state.RegisterReducer)
+const Register = ({ navigation }) => {
+  const { form } = useSelector(state => state.RegisterReducer)
 
-  useEffect(() => {
-    console.log(RegisterReducer)
-  })
+  const dispatch = useDispatch()
 
-  const [form, setForm] = useState({
-    fullName: '',
-    email: '',
-    password: ''
-  })
-
-  const onInputChange = (value, input) => {
-    setForm({
-      ...form,
-      [input]: value,
-    })
+  const onInputChange = (value, inputType) => {
+    dispatch(setForm(inputType, value))
   }
 
   const sendData = () => {
@@ -31,9 +21,9 @@ const Register = () => {
   return (
     <View style={styles.wrapper.page}>
       <ScrollView showsVerticalScrollIndicator={false}>
-        <IconBack width={25} height={25} />
+        <Button type="icon" name="back" onPress={() => navigation.goBack()} />
         <IllustrationRegister width={115} height={106} style={styles.illustration} />
-        <Text style={styles.text.desc}>Mohon isi beberapa data untuk proses pendaftaran anda</Text>
+        <Text style={styles.text.desc}>Mohon isi beberapa data untuk proses pendaftaran anda {name}</Text>
         <View style={styles.space(64)} />
         <Input placeholder="Nama lengkap" value={form.fullName} onChangeText={value => onInputChange(value, 'fullName')} />
         <View style={styles.space(33)} />
